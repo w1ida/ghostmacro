@@ -10,7 +10,8 @@ interface Props {
 }
 
 export function ConversionReport({ lineCount, procedureCount, errors, unsupported, warnings }: Props) {
-  const clean = errors.length === 0 && unsupported.length === 0 && warnings.length === 0
+  const hasNoProcedures = procedureCount === 0
+  const clean = !hasNoProcedures && errors.length === 0 && unsupported.length === 0 && warnings.length === 0
   const hasConversionGaps = errors.length > 0 || unsupported.length > 0
 
   return (
@@ -24,7 +25,9 @@ export function ConversionReport({ lineCount, procedureCount, errors, unsupporte
         <span>{errors.length} error{errors.length === 1 ? '' : 's'}</span>
       </div>
       <p>
-        {clean ? (
+        {hasNoProcedures ? (
+          <strong>Nothing to convert — add a Sub or Function.</strong>
+        ) : clean ? (
           <strong className="ok">Clean resurrection — the macro fit the supported subset exactly.</strong>
         ) : hasConversionGaps ? (
           <strong>Honest, not perfect — see what did not convert below.</strong>

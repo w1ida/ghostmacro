@@ -275,7 +275,12 @@ function emitProcedure(proc: Procedure, warnings: TranspileWarning[]): string[] 
 
 const RUNTIME_HELPERS = ['vbaSum', 'vbaAverage', 'vbaCount', 'vbaLen', 'vbaUCase', 'vbaLCase', 'vbaTrim', 'vbaLeft', 'vbaRight', 'vbaMid', 'vbaReplace', 'vbaFormat', 'vbaRound', 'vbaMax', 'vbaMin']
 
+/** Transpile a parse result into deterministic TypeScript; an empty program returns empty code and preserves reported unsupported constructs. */
 export function transpile(result: ParseResult): TranspileResult {
+  if (result.program.procedures.length === 0) {
+    return { code: '', warnings: [], unsupported: result.unsupported }
+  }
+
   const warnings: TranspileWarning[] = []
   const body: string[] = []
 

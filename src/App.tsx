@@ -21,15 +21,19 @@ export default function App() {
 
   const parsed = useMemo(() => parseVBA(source), [source])
   const transpiled = useMemo(() => transpile(parsed), [parsed])
+  const hasProcedures = parsed.program.procedures.length > 0
+  const lineCount = source === '' ? 0 : source.split('\n').length
 
   const conversionGaps = [
     `${parsed.errors.length} parse error${parsed.errors.length === 1 ? '' : 's'}`,
     `${transpiled.unsupported.length} unsupported construct${transpiled.unsupported.length === 1 ? '' : 's'}`,
     `${transpiled.warnings.length} warning${transpiled.warnings.length === 1 ? '' : 's'}`,
   ].filter((entry) => !entry.startsWith('0 '))
-  const toast = conversionGaps.length === 0
-    ? `Resurrected ${parsed.program.procedures.length} procedure(s) from ${fileLabel} — no errors or warnings.`
-    : `Conversion of ${fileLabel} found ${conversionGaps.join(', ')}. See the report below.`
+  const toast = !hasProcedures
+    ? null
+    : conversionGaps.length === 0
+      ? `Resurrected ${parsed.program.procedures.length} procedure(s) from ${fileLabel} — no errors or warnings.`
+      : `Conversion of ${fileLabel} found ${conversionGaps.join(', ')}. See the report below.`
 
   const selectSample = (id: string) => {
     const s = SAMPLES.find((x) => x.id === id) ?? SAMPLES[0]
@@ -73,24 +77,31 @@ export default function App() {
       <main>
         <UploadPanel
           samples={SAMPLES}
-          selectedId={customSource ? '' : selectedId}
+          selectedId={customSource !== null ? '' : selectedId}
           onSelectSample={selectSample}
           onUpload={loadCustomSource}
           onPaste={(text) => loadCustomSource('pasted-code.vba', text)}
         />
-        <p className="current-file">Now resurrecting: <code>{fileLabel}</code> · {source.split('\n').length} lines</p>
+        <p className="current-file">Now resurrecting: <code>{fileLabel}</code> · {lineCount} lines</p>
 
         <DiffView vbaSource={source} tsCode={transpiled.code} />
         <div className="copy-row">
-          <button type="button" className="btn secondary" onClick={copyCode}>
-            {copyStatus === 'copied' ? '✅ Copied!' : copyStatus === 'failed' ? '⚠️ Copy unavailable' : '📋 Copy generated TypeScript'}
+          <button type="button" className="btn secondary" disabled={!hasProcedures} onClick={copyCode}>
+            {!hasProcedures ? 'Nothing to copy' : copyStatus === 'copied' ? '✅ Copied!' : copyStatus === 'failed' ? '⚠️ Copy unavailable' : '📋 Copy generated TypeScript'}
           </button>
         </div>
 
-        <GeneratedAppPreview rows={rows} toast={toast} onAddRow={(row) => setRows((prev) => [...prev, row])} />
+        {hasProcedures ? (
+          <GeneratedAppPreview rows={rows} toast={toast} onAddRow={(row) => setRows((prev) => [...prev, row])} />
+        ) : (
+          <section className="panel" aria-label="Empty generated app preview">
+            <h2>3 · Nothing to run yet 👻</h2>
+            <p className="muted" role="status">No Sub or Function was found. Add one to generate a runnable preview.</p>
+          </section>
+        )}
 
         <ConversionReport
-          lineCount={source.split('\n').length}
+          lineCount={lineCount}
           procedureCount={parsed.program.procedures.length}
           errors={parsed.errors}
           unsupported={transpiled.unsupported}

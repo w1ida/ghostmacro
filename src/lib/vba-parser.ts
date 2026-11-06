@@ -93,6 +93,7 @@ function stripComment(line: string): { code: string; comment: string | null } {
   return { code: line.trim(), comment: null }
 }
 
+/** Parse raw VBA source into an AST and issue lists; invalid input is returned as errors or unsupported entries and never thrown. */
 export function parseVBA(source: string): ParseResult {
   const errors: ParseError[] = []
   const unsupported: UnsupportedConstruct[] = []
@@ -116,7 +117,7 @@ export function parseVBA(source: string): ParseResult {
 
     const { code, comment } = stripComment(trimmed)
     if (comment !== null && code === '') {
-      push({ kind: 'comment', line: lineNo, text: comment, raw })
+      if (current) push({ kind: 'comment', line: lineNo, text: comment, raw })
       return
     }
     if (code === '') return
