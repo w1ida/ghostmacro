@@ -1,0 +1,1 @@
+{"hooks":[{"command":"npx tsc --noEmit","description":"Typecheck the project after any TypeScript file is saved by the agent. Fix type errors instead of disabling this hook.","event":"PostFileSave","name":"lint-on-save","patterns":["src/**/*.{ts,tsx}"]}],"version":1}

@@ -1,0 +1,1 @@
+{"hooks":[{"command":"npx vitest run src/lib --reporter=basic","description":"Run the parser/transpiler unit + property tests after any lib file is saved by the agent. A failing test blocks the next spec task until it is fixed.","event":"PostFileSave","name":"test-on-save","patterns":["src/lib/**/*.{ts,tsx}"]}],"version":1}
