@@ -6,7 +6,7 @@ Phased plan Nov 6 – Dec 5, 2026. Implement in order. Each task is done only wh
 - [x] 1.1 Create repo skeleton: README, LICENSE (MIT), .gitignore (no `.kiro` line), package.json, Vite + TS config.
 - [x] 1.2 Write `.kiro/steering/` (product, tech, structure), `.kiro/specs/ghostmacro-v1/` (requirements, design, tasks), hooks, MCP settings, Crew agent definition.
 - [x] 1.3 Write the 3 sample `.bas` files to fit the supported subset.
-- [ ] 1.4 Create the public GitHub repo, push this skeleton, verify the MIT license is detected and `/.kiro` is visible at the root. (chen — needs your GitHub account; do not invent a username.)
+- [x] 1.4 Create the public GitHub repo, push this skeleton, verify the MIT license is detected and `/.kiro` is visible at the root. (Done Nov 6: repo https://github.com/w1ida/ghostmacro created via `gh repo create` after chen authorized the gh device code; MIT detected, `/.kiro` at root verified; Phase 3 commit c1ff71a and Phase 4 commit 960adba pushed.)
 - [ ] 1.5 Register / confirm Devpost registration for Kiroween 2026 and create a draft submission early (save drafts often).
 
 ## Phase 2 — Parser + transpiler core (Nov 8–14)
