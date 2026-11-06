@@ -6,10 +6,10 @@
 > Every section below needs one real example from this repo before submission.
 
 ## 1. Surfaces used — IDE, CLI, Web, Crew
-- **Kiro IDE:** primary build surface. Spec-driven workflow for the parser/transpiler; steering files loaded every session.
-- **Kiro CLI:** [TODO: record what was actually run — e.g. `kiro` headless runs for the Crew batch conversion, typechecks, test runs. If CLI was not used, say so honestly and do not claim it.]
-- **Kiro Web:** [TODO: record if used, and for what. If not used, omit — do not invent usage.]
-- **Kiro Crew:** the batch converter. See §5. The Crew app is a first-class deliverable (`crew/` + `.kiro/agents/crew-converter.json`), not an afterthought.
+- **Kiro IDE:** not used in this project. Muse built the skeleton and the Phase 2 parser/transpiler work (tasks 2.6, 2.7, and 2.8; 34 tests) before Kiro CLI was logged in, so that work is not presented as Kiro work.
+- **Kiro CLI:** used in this session on 2026-11-06, logged in as Builder ID `gxunda@gmail.com`, through non-interactive chat: `kiro-cli chat --no-interactive --trust-all-tools --trust-workspace`. It implemented Phase 3 tasks 3.1–3.5 one at a time, verifying each with `npm test` and `npm run build`. `gpt-5.6-sol` handled 3.1–3.3 and the first 3.4 attempt, which failed with a `ModelThrottleError` caused by high traffic; `gpt-5.6-terra` handled the 3.4 retry and 3.5. The session added `src/components/*.test.tsx` and `src/App.test.tsx`, and changed `src/components/ConversionReport.tsx`, `src/App.tsx`, `src/App.css`, `src/index.css`, and `package.json` for test devDependencies. Final verification: `npm test` passed 54 tests and `npm run build` was green.
+- **Kiro Web:** not used.
+- **Kiro Crew:** not yet run. The `crew-converter` agent definition exists, but no batch reports have been generated; this remains Phase 4, task 4.2.
 
 ## 2. Spec-driven development (vs vibe coding)
 - Wrote `.kiro/specs/ghostmacro-v1/requirements.md` (8 requirements, acceptance criteria each) **before** writing parser code, then `design.md` (tokenizer → AST → codegen → preview), then `tasks.md` (phased Nov 6–Dec 5).

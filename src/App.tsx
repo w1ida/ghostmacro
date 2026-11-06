@@ -13,7 +13,7 @@ export default function App() {
   const [customName, setCustomName] = useState<string | null>(null)
   const [customSource, setCustomSource] = useState<string | null>(null)
   const [rows, setRows] = useState<GhostRow[]>(SAMPLES[0].rows)
-  const [copied, setCopied] = useState(false)
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
 
   const sample = SAMPLES.find((s) => s.id === selectedId) ?? SAMPLES[0]
   const source = customSource ?? sample.source
@@ -22,10 +22,14 @@ export default function App() {
   const parsed = useMemo(() => parseVBA(source), [source])
   const transpiled = useMemo(() => transpile(parsed), [parsed])
 
-  const toast =
-    parsed.errors.length === 0 && parsed.unsupported.length === 0
-      ? `Resurrected ${parsed.program.procedures.length} procedure(s) from ${fileLabel} — no errors.`
-      : `Resurrected with ${parsed.unsupported.length} unsupported construct(s) — see the report below.`
+  const conversionGaps = [
+    `${parsed.errors.length} parse error${parsed.errors.length === 1 ? '' : 's'}`,
+    `${transpiled.unsupported.length} unsupported construct${transpiled.unsupported.length === 1 ? '' : 's'}`,
+    `${transpiled.warnings.length} warning${transpiled.warnings.length === 1 ? '' : 's'}`,
+  ].filter((entry) => !entry.startsWith('0 '))
+  const toast = conversionGaps.length === 0
+    ? `Resurrected ${parsed.program.procedures.length} procedure(s) from ${fileLabel} — no errors or warnings.`
+    : `Conversion of ${fileLabel} found ${conversionGaps.join(', ')}. See the report below.`
 
   const selectSample = (id: string) => {
     const s = SAMPLES.find((x) => x.id === id) ?? SAMPLES[0]
@@ -35,11 +39,26 @@ export default function App() {
     setRows(s.rows)
   }
 
-  const copyCode = () => {
-    void navigator.clipboard?.writeText(transpiled.code).then(() => {
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 2000)
-    })
+  const loadCustomSource = (name: string, sourceText: string) => {
+    setSelectedId('')
+    setCustomName(name)
+    setCustomSource(sourceText)
+    setRows([])
+  }
+
+  const copyCode = async () => {
+    if (!navigator.clipboard?.writeText) {
+      setCopyStatus('failed')
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(transpiled.code)
+      setCopyStatus('copied')
+      window.setTimeout(() => setCopyStatus('idle'), 2000)
+    } catch {
+      setCopyStatus('failed')
+    }
   }
 
   return (
@@ -48,7 +67,7 @@ export default function App() {
         <p className="eyebrow">🎃 Kiroween 2026 · Frankenstein</p>
         <h1>GhostMacro <span aria-hidden="true">👻</span></h1>
         <p className="pitch">Talk to your dead macros. Upload an Excel VBA macro — watch it rise as a working modern web app.</p>
-        <p className="muted">Deterministic parser + transpiler, property-based tests, and a Kiro Crew batch converter. No backend, no API keys.</p>
+        <p className="muted">Deterministic parser + transpiler and property-based tests. No backend, no API keys.</p>
       </header>
 
       <main>
@@ -56,15 +75,15 @@ export default function App() {
           samples={SAMPLES}
           selectedId={customSource ? '' : selectedId}
           onSelectSample={selectSample}
-          onUpload={(name, text) => { setCustomName(name); setCustomSource(text) }}
-          onPaste={(text) => { setCustomName('pasted-code.vba'); setCustomSource(text) }}
+          onUpload={loadCustomSource}
+          onPaste={(text) => loadCustomSource('pasted-code.vba', text)}
         />
         <p className="current-file">Now resurrecting: <code>{fileLabel}</code> · {source.split('\n').length} lines</p>
 
         <DiffView vbaSource={source} tsCode={transpiled.code} />
         <div className="copy-row">
           <button type="button" className="btn secondary" onClick={copyCode}>
-            {copied ? '✅ Copied!' : '📋 Copy generated TypeScript'}
+            {copyStatus === 'copied' ? '✅ Copied!' : copyStatus === 'failed' ? '⚠️ Copy unavailable' : '📋 Copy generated TypeScript'}
           </button>
         </div>
 
@@ -80,7 +99,7 @@ export default function App() {
       </main>
 
       <footer>
-        <p>GhostMacro — Kiroween 2026, Frankenstein. Built with Kiro (spec-driven, hooks, MCP, Crew). MIT licensed. <code>/.kiro</code> lives at the repo root.</p>
+        <p>GhostMacro — Kiroween 2026, Frankenstein. Built with this repository’s <code>.kiro</code> spec and steering configuration, plus Phase 3 UI work completed with Kiro CLI in this session. MIT licensed.</p>
       </footer>
     </div>
   )

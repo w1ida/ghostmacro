@@ -11,6 +11,8 @@
   --ok: #4ade80;
   --warn: #fbbf24;
   --danger: #f87171;
+  --line-number: #8f7bb6;
+  --focus: #ffb04d;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--bone);
   background: var(--bg);
@@ -24,4 +26,13 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .ok { color: var(--ok); }
 .error { color: var(--danger); }
 button { font: inherit; }
-button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--pumpkin); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -10,32 +10,43 @@ interface Props {
 }
 
 export function ConversionReport({ lineCount, procedureCount, errors, unsupported, warnings }: Props) {
-  const clean = errors.length === 0 && unsupported.length === 0
+  const clean = errors.length === 0 && unsupported.length === 0 && warnings.length === 0
+  const hasConversionGaps = errors.length > 0 || unsupported.length > 0
+
   return (
     <section className="panel" aria-label="Conversion report">
       <h2>4 · Conversion report 📜</h2>
+      <div className="stats" aria-label="Conversion counts">
+        <span>{procedureCount} procedure{procedureCount === 1 ? '' : 's'}</span>
+        <span>{lineCount} lines</span>
+        <span>{warnings.length} warning{warnings.length === 1 ? '' : 's'}</span>
+        <span>{unsupported.length} unsupported</span>
+        <span>{errors.length} error{errors.length === 1 ? '' : 's'}</span>
+      </div>
       <p>
-        {procedureCount} procedure{procedureCount === 1 ? '' : 's'} · {lineCount} lines ·{' '}
         {clean ? (
-          <strong className="ok">Clean resurrection — no errors, nothing unsupported.</strong>
-        ) : (
+          <strong className="ok">Clean resurrection — the macro fit the supported subset exactly.</strong>
+        ) : hasConversionGaps ? (
           <strong>Honest, not perfect — see what did not convert below.</strong>
+        ) : (
+          <strong>Resurrection complete with warnings — review the generated code below.</strong>
         )}
       </p>
       {warnings.length > 0 && (
         <>
           <h3>Warnings ({warnings.length})</h3>
-          <ul>{warnings.map((w, i) => <li key={i}>Line {w.line}: {w.message}</li>)}</ul>
+          <ul>{warnings.map((warning, index) => <li key={index}>Line {warning.line}: {warning.message}</li>)}</ul>
         </>
       )}
       {unsupported.length > 0 && (
         <>
           <h3>Unsupported constructs ({unsupported.length})</h3>
           <ul>
-            {unsupported.map((u, i) => (
-              <li key={i}>
-                <strong>Line {u.line} — {u.construct}:</strong> {u.suggestion}{' '}
-                <code>{u.raw.trim()}</code>
+            {unsupported.map((item, index) => (
+              <li key={index}>
+                <strong>Line {item.line} — {item.construct}</strong>
+                <div>Suggested rewrite: {item.suggestion}</div>
+                <code>Source: {item.raw.trim()}</code>
               </li>
             ))}
           </ul>
@@ -45,13 +56,15 @@ export function ConversionReport({ lineCount, procedureCount, errors, unsupporte
         <>
           <h3>Parse errors ({errors.length})</h3>
           <ul>
-            {errors.map((e, i) => (
-              <li key={i}>Line {e.line}: {e.message} <code>{e.raw.trim()}</code></li>
+            {errors.map((error, index) => (
+              <li key={index}>
+                <strong>Line {error.line}:</strong> {error.message}
+                <code>Source: {error.raw.trim()}</code>
+              </li>
             ))}
           </ul>
         </>
       )}
-      {clean && warnings.length === 0 && <p className="muted">Nothing to report — the macro fit the supported subset exactly.</p>}
     </section>
   )
 }
