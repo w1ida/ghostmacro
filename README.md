@@ -11,7 +11,7 @@ This is a **Frankenstein** project in the literal sense: it stitches together th
 - **Dead technology:** Excel VBA (1993– ), `Range` / `Cells`, `MsgBox`, `InputBox`, worksheet loops
 - **Modern body:** TypeScript, React, Vite, Tailwind
 - **A second brain:** deterministic parsing + property-based tests that prove the resurrection kept the original behaviour
-- **A skeleton crew:** a Kiro Crew background agent that batch-converts uploads and posts a conversion report
+- **A skeleton crew:** a Crew-style batch conversion that turns a folder of macros into one report per file (run with Kiro CLI following the crew-converter contract — see docs/KIRO-USAGE.md §5).
 
 No full VBA transpiler is attempted — that would be a lie in 28 days. GhostMacro converts a **documented, supported subset** and fails gracefully, with a clear unsupported-construct report, for everything else. See [Supported subset](#supported-vba-subset).
 
@@ -75,7 +75,7 @@ ghostmacro/
 
 Full write-up outline: [`docs/KIRO-USAGE.md`](docs/KIRO-USAGE.md).
 
-Short version: spec-driven development in Kiro IDE (`.kiro/specs/ghostmacro-v1/` — requirements → design → tasks, reviewed before any implementation), steering files that keep the transpiler's subset honest, agent hooks that lint and test on save, MCP servers for GitHub and the local filesystem, a custom Crew agent that does batch conversion in the background, and property-based tests (`fast-check`) that catch conversion bugs unit tests miss. Built with Kiro IDE + CLI; Crew app in `crew/` (see `docs/PLAN.md` Week 3).
+Short version: spec-driven development with Kiro (`.kiro/specs/ghostmacro-v1/` — requirements → design → tasks, reviewed before any implementation), steering files that keep the transpiler's subset honest, and property-based tests (`fast-check`) that catch conversion bugs unit tests miss. The save hooks and MCP servers were configured but never fired or invoked under Kiro CLI; the Crew batch reports were produced by Kiro CLI following the crew-converter contract (see docs/KIRO-USAGE.md §5). Phases 3–4 were built with Kiro CLI; the skeleton and Phase 2 predate the Kiro CLI login and are not claimed as Kiro work.
 
 ## 🏆 Kiroween 2026
 
@@ -86,7 +86,7 @@ Short version: spec-driven development in Kiro IDE (`.kiro/specs/ghostmacro-v1/`
 
 ## ⚠️ Status
 
-V1 skeleton — parser and transpiler cover the core subset with real code; the runtime helpers, Crew app, and polished generated-app templates are phased in `docs/PLAN.md` / `.kiro/specs/ghostmacro-v1/tasks.md`. The 3 samples are written to fit the supported subset and are the acceptance test for “works end-to-end”.
+Phases 3–4 done. 68/68 tests passing. Crew-style batch reports in `crew/`. Live demo: https://ghostmacro-6pq129pfm-vieta.vercel.app. Remaining: demo video, bonus blog, social post, final Devpost submission (deadline Dec 5, 2026 06:00 SGT).
 
 ## License
 

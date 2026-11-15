@@ -38,8 +38,8 @@ chen: non-student, no startup, no Kiroween 2025, solo, has Kiro account, 4,000 c
 | 0:00–0:15 | Haunted spreadsheet on screen | "Every company has a spreadsheet nobody dares to touch. Its author left in 2009. The macro still runs the business." |
 | 0:15–1:15 | Expense Tracker sample, live | "GhostMacro holds a séance. VBA on the left — TypeScript on the right. Same logic, new body." Add a row, total updates. |
 | 1:15–1:45 | Upload your own + unsupported report | "Upload your own .bas. If it uses GoTo or CreateObject, you get the exact line and a fix — not a silent wrong answer." |
-| 1:45–2:15 | Crew batch report | "And a Kiro Crew agent converts a whole folder overnight and leaves a report per file." Show `crew/reports/SUMMARY.md`. |
-| 2:15–2:45 | Kiro in 20 seconds | "Built spec-first in Kiro: requirements → design → tasks, steering, hooks, MCP, property-based tests." Show `/.kiro`. |
+| 1:45–2:15 | Crew batch report | "And a Crew-style batch run converts a whole folder and leaves a report per file — produced by Kiro CLI following the crew-converter contract." Show `crew/reports/SUMMARY.md`. |
+| 2:15–2:45 | Kiro in 20 seconds | "Built spec-first in Kiro: requirements → design → tasks, steering files, and property-based tests — all run with Kiro CLI." Show `/.kiro`. |
 | 2:45–3:00 | Close | "GhostMacro — talk to your dead macros. Frankenstein, Kiroween 2026." Live URL + GitHub on screen. |
 
 ## Submission checklist (Devpost)
@@ -56,7 +56,7 @@ chen: non-student, no startup, no Kiroween 2025, solo, has Kiro account, 4,000 c
 Title: *"I held a séance for a dead Excel macro — and Kiro brought it back as a React app"*
 1. The haunted spreadsheet: why VBA macros are the zombies of enterprise software.
 2. The Frankenstein idea: stitching a 1993 language to a 2026 stack.
-3. How Kiro changed the build: spec-first vs vibe coding — the spec caught a Range-mapping bug before a line of UI existed; hooks ran tests on every save; the Crew agent did the boring batch work.
+3. How Kiro changed the build: spec-first vs vibe coding — the spec caught a Range-mapping bug before a line of UI existed; tests and builds were run explicitly at each task gate — the save hooks were configured but never fired under Kiro CLI — and the batch reports were produced by Kiro CLI following the Crew agent contract.
 4. What the transpiler actually proves: determinism + property-based tests, and why "fail gracefully with a line number" matters more than "convert everything".
 5. Try it: live URL + GitHub link. Built for Kiroween 2026.
 
